@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializer import RegisterSerializer, LoginSerializer
 from django.core.cache import cache
+
+from .tasks import send_notification
 # Create your views here.
 
 
@@ -23,6 +25,8 @@ class TaskView(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         task = serializer.save(owner=self.request.user)
         cache.set(f'task_{self.request.user.id}_{task.id}', task, timeout=3600)
+        
+        send_notification.delay(self.request.user.id, task.id)
 
     def retrieve(self, request, *args, **kwargs):
         task_id = kwargs.get('pk')
