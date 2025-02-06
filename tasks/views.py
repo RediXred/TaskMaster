@@ -22,12 +22,11 @@ class TaskView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         task = serializer.save(owner=self.request.user)
-        cache.set(f'task_{task.id}', task, timeout=3600)
-        print("set")
+        cache.set(f'task_{self.request.user.id}_{task.id}', task, timeout=3600)
 
     def retrieve(self, request, *args, **kwargs):
         task_id = kwargs.get('pk')
-        cached_task = cache.get(f'task_{task_id}')
+        cached_task = cache.get(f'task_{self.request.user.id}_{task_id}')
         if cached_task:
             print("cached")
             serializer = self.get_serializer(cached_task)
@@ -35,17 +34,17 @@ class TaskView(viewsets.ModelViewSet):
         else:
             print("no cached")
             task = self.get_object()
-            cache.set(f'task_{task.id}', task, timeout=3600)
+            cache.set(f'task_{self.request.user.id}_{task_id}', task, timeout=3600)
             serializer = self.get_serializer(task)
             return Response(serializer.data)
     
     def perform_update(self, serializer):
         task = serializer.save()
-        cache.delete(f'task_{task.id}')
-        cache.set(f'task_{task.id}', task, timeout=3600)
+        cache.delete(f'task_{self.request.user.id}_{task.id}')
+        cache.set(f'task_{self.request.user.id}_{task.id}', task, timeout=3600)
     
     def perform_destroy(self, instance):
-        cache.delete(f'task_{instance.id}')
+        cache.delete(f'task_{self.request.user.id}_{instance.id}')
         instance.delete()
             
 class RegisterView(generics.CreateAPIView):
