@@ -6,7 +6,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'completed', 'created_at']
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
