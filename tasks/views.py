@@ -23,14 +23,17 @@ class TaskView(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         task = serializer.save(owner=self.request.user)
         cache.set(f'task_{task.id}', task, timeout=3600)
+        print("set")
 
     def retrieve(self, request, *args, **kwargs):
         task_id = kwargs.get('pk')
         cached_task = cache.get(f'task_{task_id}')
         if cached_task:
+            print("cached")
             serializer = self.get_serializer(cached_task)
             return Response(serializer.data)
         else:
+            print("no cached")
             task = self.get_object()
             cache.set(f'task_{task.id}', task, timeout=3600)
             serializer = self.get_serializer(task)
