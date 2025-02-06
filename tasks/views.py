@@ -6,5 +6,5 @@ from rest_framework import viewsets
 
 
 class TaskView(viewsets.ModelViewSet):
-    objs = Task.objects.all()
+    queryset = Task.objects.all()
     serializer_class = TaskSerializer
