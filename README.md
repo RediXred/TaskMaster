@@ -96,13 +96,14 @@ Once everything is set up and running, you can test task creation, fetching, upd
 - **GET** `/api/tasks/{id}/` — Get task details
 - **PUT/PATCH** `/api/tasks/{id}/` — Update a task
 - **DELETE** `/api/tasks/{id}/` — Delete a task
+- **REGISTER** `/api/register/` — Register an account
+- **LOGIN** `/api/login/` — Login into account
 
 ### Authentication
 
 To interact with the tasks, user authentication is required. JWT tokens are used for authentication. You can get a token by making a request to the login endpoint:
-
-- **POST** `/api/token/` — Get JWT token
-
+- **LOGIN** `/api/login/` — Login into account
+  
 Once you have the token, include it in the Authorization header to access protected endpoints.
 
 ## Author
