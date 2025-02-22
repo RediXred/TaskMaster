@@ -89,6 +89,10 @@ celery -A TaskMaster.celery worker --loglevel=info
 
 Once everything is set up and running, you can test task creation, fetching, updating, and deletion via the API or through the Django admin panel.
 
+### 10. Swagger
+
+You can check API documentation via `/swagger/`.
+
 ### API Endpoints
 
 - **POST** `/api/tasks/` — Create a new task
